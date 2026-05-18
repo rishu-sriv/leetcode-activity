@@ -7,4 +7,5 @@ Updated automatically — nothing is committed by hand.
 | Solved (IST) | Problem | Language |
 | --- | --- | --- |
 <!-- log -->
+| 2026-05-18 13:12 IST | [Contains Duplicate](https://leetcode.com/problems/contains-duplicate/) | cpp |
 | 2026-01-26 22:32 IST | [Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/) | cpp |
