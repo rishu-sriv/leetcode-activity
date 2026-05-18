@@ -7,6 +7,7 @@ Updated automatically — nothing is committed by hand.
 | Solved (IST) | Problem | Language |
 | --- | --- | --- |
 <!-- log -->
+| 2026-05-18 14:54 IST | [Two Sum](https://leetcode.com/problems/two-sum/) | cpp |
 | 2026-05-18 14:38 IST | [Valid Anagram](https://leetcode.com/problems/valid-anagram/) | cpp |
 | 2026-05-18 13:12 IST | [Contains Duplicate](https://leetcode.com/problems/contains-duplicate/) | cpp |
 | 2026-01-26 22:32 IST | [Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/) | cpp |
