@@ -7,6 +7,7 @@ Updated automatically — nothing is committed by hand.
 | Solved (IST) | Problem | Language |
 | --- | --- | --- |
 <!-- log -->
+| 2026-11-24 18:13 IST | [Rotate Array](https://leetcode.com/problems/rotate-array/) | cpp |
 | 2026-06-15 19:56 IST | [Product of Array Except Self](https://leetcode.com/problems/product-of-array-except-self/) | cpp |
 | 2026-06-15 18:03 IST | [Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/) | cpp |
 | 2026-05-18 17:18 IST | [Group Anagrams](https://leetcode.com/problems/group-anagrams/) | cpp |
