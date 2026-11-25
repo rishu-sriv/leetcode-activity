@@ -1,0 +1,36 @@
+name: sync
+
+on:
+  schedule:
+    # Best-effort: GitHub fires these every 5-20 minutes in practice.
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+# Serialize ticks so two runs can never race the data/seen.json ledger.
+concurrency:
+  group: sync
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Commit newly accepted submissions
+        run: node scripts/sync.mjs
+
+      - name: Push
+        run: |
+          if [ -z "$(git log origin/${GITHUB_REF_NAME}..HEAD --oneline)" ]; then
+            echo "nothing to push"
+            exit 0
+          fi
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin HEAD:"${GITHUB_REF_NAME}"
