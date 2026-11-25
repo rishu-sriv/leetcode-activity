@@ -7,6 +7,7 @@ Updated automatically — nothing is committed by hand.
 | Solved (IST) | Problem | Language |
 | --- | --- | --- |
 <!-- log -->
+| 2026-11-25 15:56 IST | [Missing Number](https://leetcode.com/problems/missing-number/) | cpp |
 | 2026-11-25 15:00 IST | [Move Zeroes](https://leetcode.com/problems/move-zeroes/) | cpp |
 | 2026-11-24 18:13 IST | [Rotate Array](https://leetcode.com/problems/rotate-array/) | cpp |
 | 2026-06-15 19:56 IST | [Product of Array Except Self](https://leetcode.com/problems/product-of-array-except-self/) | cpp |
