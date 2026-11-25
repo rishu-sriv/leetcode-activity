@@ -7,6 +7,7 @@ Updated automatically — nothing is committed by hand.
 | Solved (IST) | Problem | Language |
 | --- | --- | --- |
 <!-- log -->
+| 2026-11-25 22:29 IST | [Single Number](https://leetcode.com/problems/single-number/) | cpp |
 | 2026-11-25 22:23 IST | [Max Consecutive Ones](https://leetcode.com/problems/max-consecutive-ones/) | cpp |
 | 2026-11-25 15:56 IST | [Missing Number](https://leetcode.com/problems/missing-number/) | cpp |
 | 2026-11-25 15:00 IST | [Move Zeroes](https://leetcode.com/problems/move-zeroes/) | cpp |
