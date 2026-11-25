@@ -4,6 +4,24 @@ Accepted submissions from [leetcode.com/u/rishu_codes](https://leetcode.com/u/ri
 mirrored here as commits so practice shows up on the contribution graph.
 Updated automatically — nothing is committed by hand.
 
+## How this works
+
+A GitHub Action polls LeetCode's public API every five minutes and commits any
+accepted submission it hasn't seen before, authored as me and dated to the
+submission's real IST time. `data/seen.json` is the ledger of submissions
+already committed, so a repeated or overlapping run is a no-op. No browser
+extension, no local script, no credential that expires.
+
+Two things to know:
+
+- **It isn't instant.** GitHub's scheduled runs are best-effort and fire every
+  5-20 minutes in practice, so a square shows up within roughly 20 minutes of
+  an accept, not the same second.
+- **A 60-day gap pauses it.** GitHub disables scheduled workflows in a repo
+  with no activity for 60 days. The sync's own commits count as activity, so
+  this only happens after a 60-day break from solving; re-enable it with one
+  click in the Actions tab.
+
 | Solved (IST) | Problem | Language |
 | --- | --- | --- |
 <!-- log -->
