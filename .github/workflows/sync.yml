@@ -2,8 +2,10 @@ name: sync
 
 on:
   schedule:
-    # Best-effort: GitHub fires these every 5-20 minutes in practice.
-    - cron: '*/5 * * * *'
+    # Odd offsets on purpose: GitHub deprioritizes schedules on round
+    # five-minute and top-of-hour marks, which are the most congested.
+    # Best-effort either way - a tick can be delayed or skipped.
+    - cron: '7,22,37,52 * * * *'
   workflow_dispatch:
 
 # Serialize ticks so two runs can never race the data/seen.json ledger.
