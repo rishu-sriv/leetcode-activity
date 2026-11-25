@@ -23,14 +23,20 @@ jobs:
         with:
           node-version: '22'
 
+      # A fresh runner has no committer identity; sync.mjs sets the *author*
+      # (which is what the contribution graph counts) but git still refuses to
+      # commit without one of these.
+      - name: Identify the committer
+        run: |
+          git config user.name 'rishu-sriv'
+          git config user.email '180553705+rishu-sriv@users.noreply.github.com'
+
       - name: Commit newly accepted submissions
         run: node scripts/sync.mjs
 
+      # No-op push is "Everything up-to-date", exit 0. The rebase only matters
+      # if a tick somehow overlapped despite the concurrency group.
       - name: Push
         run: |
-          if [ -z "$(git log origin/${GITHUB_REF_NAME}..HEAD --oneline)" ]; then
-            echo "nothing to push"
-            exit 0
-          fi
-          git pull --rebase origin "${GITHUB_REF_NAME}"
-          git push origin HEAD:"${GITHUB_REF_NAME}"
+          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+          git push origin "HEAD:${GITHUB_REF_NAME}"
