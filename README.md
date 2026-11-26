@@ -25,6 +25,7 @@ Two things to know:
 | Solved (IST) | Problem | Language |
 | --- | --- | --- |
 <!-- log -->
+| 2026-11-27 02:47 IST | [Majority Element](https://leetcode.com/problems/majority-element/) | cpp |
 | 2026-11-27 02:45 IST | [Majority Element](https://leetcode.com/problems/majority-element/) | cpp |
 | 2026-11-27 02:41 IST | [Majority Element](https://leetcode.com/problems/majority-element/) | cpp |
 | 2026-11-26 20:30 IST | [Sort Colors](https://leetcode.com/problems/sort-colors/) | cpp |
