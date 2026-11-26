@@ -38,3 +38,22 @@ export function insertRows(readmeText, rows) {
   const cut = at + LOG_MARKER.length
   return `${readmeText.slice(0, cut)}\n${rows.join('\n')}${readmeText.slice(cut)}`
 }
+
+// Every accepted submission, from both of LeetCode's public endpoints.
+//
+// recentSubmissionList returns each submission individually (so three accepted
+// attempts at one problem are three entries) but its window is only the last
+// ~20 submissions, failures included. recentAcSubmissionList reaches further
+// back but silently collapses a problem to its most recent accept. Unioning
+// them by submission id gives every accept in the recent window plus the
+// latest accept of older problems.
+export function mergeAccepted(allSubmissions, acSubmissions) {
+  const byId = new Map()
+  for (const sub of allSubmissions) {
+    if (sub.statusDisplay === 'Accepted') byId.set(String(sub.id), sub)
+  }
+  for (const sub of acSubmissions) {
+    if (!byId.has(String(sub.id))) byId.set(String(sub.id), sub)
+  }
+  return [...byId.values()]
+}

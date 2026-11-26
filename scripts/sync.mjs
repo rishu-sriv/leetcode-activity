@@ -7,20 +7,27 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
 import { argv, env, exit } from 'node:process'
-import { newSubmissions, istCommitDate, readmeRow, insertRows } from './lib.mjs'
+import { newSubmissions, istCommitDate, readmeRow, insertRows, mergeAccepted } from './lib.mjs'
 
 const USERNAME = env.LEETCODE_USERNAME || 'rishu_codes'
 const AUTHOR = 'rishu-sriv <180553705+rishu-sriv@users.noreply.github.com>'
 const SEEN_PATH = new URL('../data/seen.json', import.meta.url)
 const README_PATH = new URL('../README.md', import.meta.url)
 
-const QUERY = `query($u:String!,$n:Int!){
+// Deduped by problem, but reaches further back.
+const AC_QUERY = `query($u:String!,$n:Int!){
   recentAcSubmissionList(username:$u,limit:$n){id title titleSlug timestamp lang}
+}`
+
+// Every submission individually, pass or fail, over a shorter window. This is
+// the one that sees brute-force -> optimal as the separate accepts they are.
+const ALL_QUERY = `query($u:String!,$n:Int!){
+  recentSubmissionList(username:$u,limit:$n){id title titleSlug timestamp lang statusDisplay}
 }`
 
 // Never throws and never reports a partial list: a bad tick must be a no-op,
 // not a failed workflow run and not a reason to drop ids from the ledger.
-export async function fetchRecentAc(username, fetchImpl = fetch) {
+async function query(username, gql, key, fetchImpl) {
   try {
     const res = await fetchImpl('https://leetcode.com/graphql', {
       method: 'POST',
@@ -29,7 +36,7 @@ export async function fetchRecentAc(username, fetchImpl = fetch) {
         Referer: `https://leetcode.com/u/${username}/`,
         'User-Agent': 'leetcode-activity-sync',
       },
-      body: JSON.stringify({ query: QUERY, variables: { u: username, n: 20 } }),
+      body: JSON.stringify({ query: gql, variables: { u: username, n: 20 } }),
     })
     if (!res.ok) {
       console.warn(`leetcode responded ${res.status}; treating as nothing new`)
@@ -40,9 +47,9 @@ export async function fetchRecentAc(username, fetchImpl = fetch) {
       console.warn(`leetcode graphql errors: ${JSON.stringify(body.errors)}`)
       return []
     }
-    const list = body?.data?.recentAcSubmissionList
+    const list = body?.data?.[key]
     if (!Array.isArray(list)) {
-      console.warn('leetcode payload had no recentAcSubmissionList; treating as nothing new')
+      console.warn(`leetcode payload had no ${key}; treating as nothing new`)
       return []
     }
     return list
@@ -50,6 +57,20 @@ export async function fetchRecentAc(username, fetchImpl = fetch) {
     console.warn(`could not reach leetcode (${err.message}); treating as nothing new`)
     return []
   }
+}
+
+// Kept for the older single-endpoint behaviour its tests still pin.
+export const fetchRecentAc = (username, fetchImpl = fetch) =>
+  query(username, AC_QUERY, 'recentAcSubmissionList', fetchImpl)
+
+// Both endpoints, unioned by submission id. Neither failing takes the other
+// down, and a total failure is an empty list, never a throw.
+export async function fetchAccepted(username, fetchImpl = fetch) {
+  const [all, ac] = await Promise.all([
+    query(username, ALL_QUERY, 'recentSubmissionList', fetchImpl),
+    query(username, AC_QUERY, 'recentAcSubmissionList', fetchImpl),
+  ])
+  return mergeAccepted(all, ac)
 }
 
 function readSeen() {
@@ -74,7 +95,7 @@ function commitSubmission(sub) {
 
 async function main() {
   const seen = readSeen()
-  const fresh = newSubmissions(await fetchRecentAc(USERNAME), seen)
+  const fresh = newSubmissions(await fetchAccepted(USERNAME), seen)
   if (fresh.length === 0) {
     console.log('nothing new')
     return
